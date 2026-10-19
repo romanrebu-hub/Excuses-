@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ausreden-Generator</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; display: grid; place-items: center;
+    padding: 22px; font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: linear-gradient(145deg, #eaf3ff, #fff1e8); color: #202534;
+  }
+  main {
+    width: min(100%, 430px); background: rgba(255,255,255,.94);
+    border-radius: 24px; padding: 28px 22px; text-align: center;
+    box-shadow: 0 16px 50px rgba(35,48,75,.14);
+  }
+  .emoji { font-size: 3rem; }
+  h1 { margin: 8px 0; font-size: 1.8rem; }
+  p { color: #60697a; line-height: 1.5; }
+  #excuse {
+    min-height: 125px; display: grid; place-items: center;
+    margin: 24px 0; padding: 20px; border-radius: 18px;
+    background: #f2f5fb; font-size: 1.25rem; line-height: 1.5;
+  }
+  button {
+    border: 0; border-radius: 14px; padding: 15px 20px; width: 100%;
+    font: inherit; font-weight: 750; font-size: 1.05rem; cursor: pointer;
+    background: #315ee8; color: white; box-shadow: 0 6px 0 #2144b4;
+  }
+  button:active { transform: translateY(3px); box-shadow: 0 3px 0 #2144b4; }
+  #copy { margin-top: 12px; background: #252c3b; box-shadow: 0 6px 0 #111621; }
+  .note { margin-top: 18px; font-size: .82rem; }
+</style>
+</head>
+<body>
+<main>
+  <div class="emoji" aria-hidden="true">🤷‍♂️</div>
+  <h1>Ausreden-Generator</h1>
+  <p>Ein Knopfdruck. Eine herrlich bescheuerte Ausrede.</p>
+  <div id="excuse" aria-live="polite">Ich wäre ja pünktlich gewesen, aber mein Sofa hat mich in eine wichtige Besprechung verwickelt.</div>
+  <button id="new">🎲 Neue Ausrede!</button>
+  <button id="copy">Ausrede kopieren</button>
+  <p class="note">Nur zum Spaß gedacht — die Ausreden sind frei erfunden. 😄</p>
+</main>
+<script>
+const excuses = [
+  "Ich wäre pünktlich gewesen, aber mein Sofa hat mich in eine wichtige Besprechung verwickelt.",
+  "Mein Wecker hat geklingelt, aber wir hatten unterschiedliche Auffassungen von „aufstehen“.",
+  "Ich konnte nicht los, meine Socken waren heute emotional nicht bereit.",
+  "Mein Kühlschrank brauchte dringend ein Vier-Augen-Gespräch.",
+  "Ich war schon fast fertig, dann hat mich ein Gedanke auf eine völlig unnötige Nebenquest geschickt.",
+  "Mein Haustürschlüssel hat sich versteckt. Ich glaube, er braucht mal Abstand.",
+  "Ich wollte gerade los, aber mein Kaffee hatte noch wichtige Punkte auf der Tagesordnung.",
+  "Die Zeit ist heute ungewöhnlich schnell gelaufen. Ich habe sie bereits gebeten, das zu unterlassen.",
+  "Mein Navi und ich hatten Streit. Es wollte, dass ich mein Leben überdenke.",
+  "Ich musste erst prüfen, ob die Wohnung auch ohne mich weiter funktioniert.",
+  "Ich hab mich verspätet, weil ich kurz etwas gesucht habe und dabei vergessen habe, was ich suche.",
+  "Mein Gehirn hat ein Update installiert. Der Fortschritt hing bei 99 Prozent.",
+  "Ich wollte losgehen, aber mein Schatten sah so aus, als wollte er noch bleiben.",
+  "Es gab eine spontane Krisensitzung zwischen mir, meinem Bett und der Decke.",
+  "Ich war startklar, aber meine Motivation hatte leider keinen TÜV.",
+  "Ich musste einem sehr überzeugenden Keks eine Chance geben.",
+  "Mein Schuh war nicht richtig gebunden. Ich wollte kein unnötiges Risiko eingehen.",
+  "Ich habe die Tür geöffnet, aber draußen sah es nach draußen aus. Da musste ich erst mal nachdenken.",
+  "Mein innerer Schweinehund hat heute Überstunden gemacht.",
+  "Ich hatte alles im Griff — bis ich den Griff losgelassen habe."
+];
+let last = -1;
+const out = document.getElementById("excuse");
+document.getElementById("new").addEventListener("click", () => {
+  let n;
+  do { n = Math.floor(Math.random() * excuses.length); } while (n === last && excuses.length > 1);
+  last = n;
+  out.textContent = excuses[n];
+});
+document.getElementById("copy").addEventListener("click", async () => {
+  const text = out.textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+    document.getElementById("copy").textContent = "Kopiert! ✓";
+    setTimeout(() => document.getElementById("copy").textContent = "Ausrede kopieren", 1400);
+  } catch {
+    const area = document.createElement("textarea");
+    area.value = text; document.body.appendChild(area); area.select();
+    document.execCommand("copy"); area.remove();
+    document.getElementById("copy").textContent = "Kopiert! ✓";
+    setTimeout(() => document.getElementById("copy").textContent = "Ausrede kopieren", 1400);
+  }
+});
+</script>
+</body>
+</html>
