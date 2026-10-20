@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Ausreden – Dein Ausreden-Generator</title>
+
+  <meta name="description" content="Ein unterhaltsamer Generator für kreative, lustige Ausreden.">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      color: #f5f5f5;
+      background: linear-gradient(135deg, #101827, #263957);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      padding: 35px 25px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    h1 {
+      font-size: 2.3rem;
+      margin-bottom: 10px;
+      color: #69b7ff;
+    }
+
+    .subtitle {
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+
+    .excuse-box {
+      margin: 30px 0;
+      padding: 25px 20px;
+      min-height: 130px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    #excuse {
+      font-size: 1.25rem;
+      line-height: 1.6;
+    }
+
+    button {
+      width: 100%;
+      margin: 7px 0;
+      padding: 14px 18px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+
+    button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .primary {
+      background: #3696f5;
+      color: white;
+    }
+
+    .secondary {
+      background: #e2e8f0;
+      color: #172033;
+    }
+
+    #status {
+      min-height: 22px;
+      color: #a7f3d0;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      margin-top: 25px;
+      color: #94a3b8;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <h1>🎭 Ausreden</h1>
+
+    <p class="subtitle">
+      Willkommen beim kreativen Ausreden-Generator!
+      Entdecke lustige Ideen für jede Gelegenheit.
+    </p>
+
+    <section class="excuse-box" aria-live="polite">
+      <p id="excuse">
+        Klicke auf den Button und lass dich überraschen!
+      </p>
+    </section>
+
+    <button class="primary" id="generate">
+      🎲 Neue Ausrede
+    </button>
+
+    <button class="secondary" id="copy">
+      📋 Ausrede kopieren
+    </button>
+
+    <p id="status" role="status"></p>
+
+    <footer>
+      Ausreden – Ein kleines Projekt mit Humor.
+    </footer>
+  </main>
+
+  <script>
+    "use strict";
+
+    const excuses = [
+      "Mein Wecker hat geklingelt, aber mein Bett hatte andere Pläne.",
+      "Ich wollte gerade los, da kam mir eine unerwartete Aufgabe dazwischen.",
+      "Mein Zeitgefühl hat heute offenbar Urlaub.",
+      "Ich war pünktlich – nur leider am falschen Ort.",
+      "Ich hatte alles vorbereitet. Nur das Wichtigste habe ich vergessen.",
+      "Mein Tag läuft gerade anders als mein ursprünglicher Plan.",
+      "Ich musste noch eine wichtige Sache erledigen.",
+      "Ich habe die Zeit unterschätzt. Sie war heute besonders schnell.",
+      "Mein Plan war gut. Die Umsetzung hatte allerdings eigene Ideen.",
+      "Ich wollte es sofort erledigen und habe es dann kurz vergessen.",
+      "Heute hat mein innerer Organisator offenbar frei.",
+      "Ich war gedanklich schon da, aber noch nicht tatsächlich."
+    ];
+
+    const excuseElement = document.getElementById("excuse");
+    const statusElement = document.getElementById("status");
+    const generateButton = document.getElementById("generate");
+    const copyButton = document.getElementById("copy");
+
+    let previousIndex = -1;
+
+    function generateExcuse() {
+      let index;
+
+      do {
+        index = Math.floor(Math.random() * excuses.length);
+      } while (excuses.length > 1 && index === previousIndex);
+
+      previousIndex = index;
+      excuseElement.textContent = excuses[index];
+      statusElement.textContent = "";
+    }
+
+    async function copyExcuse() {
+      const text = excuseElement.textContent.trim();
+
+      if (!text) {
+        statusElement.textContent = "Bitte zuerst eine Ausrede auswählen.";
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(text);
+        statusElement.textContent = "Ausrede wurde kopiert!";
+      } catch (error) {
+        statusElement.textContent =
+          "Kopieren nicht möglich. Bitte den Text manuell markieren.";
+      }
+    }
+
+    generateButton.addEventListener("click", generateExcuse);
+    copyButton.addEventListener("click", copyExcuse);
+  </script>
+</body>
+</html>
